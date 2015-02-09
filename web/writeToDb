@@ -1,0 +1,40 @@
+/*
+To run type nodejs writeTodDb (on linux)
+*/
+
+var mongoose = require('mongoose');
+
+//load the bookStoreModel
+var bookStoreDb = require('./bookStoreDb');
+
+//Create connection
+var db = mongoose.connection;
+mongoose.connect(bookStoreDb.url);
+
+//Open the connection to the DB
+db.on('error', console.error);
+db.once('open', function() {
+});
+
+//Load the Class Model
+var BookStoreDbModel = bookStoreDb.bookStoreModelClass();
+
+//Create a example of data
+var book = {
+    author: "GRRM",
+    name: "Dance with Dragons",
+    publisher: "Leya",
+    year: 2011
+}
+
+//Create a object from the data
+var dbBookStoreInfo = new BookStoreDbModel(book);
+
+//Save the data to DB
+dbBookStoreInfo.save(function(err, dbBookStoreInfo) {
+    if (err) {
+        return console.error(err);
+    }
+    // We log to the console, just to show what we've saved
+    console.log(dbBookStoreInfo);
+});
